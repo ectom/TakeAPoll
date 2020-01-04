@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Text, TextInput, View, Button, Alert} from 'react-native';
+import NewInputs from '../components/NewInputs';
 
 
 export default class CreatePoll extends Component {
@@ -7,13 +8,12 @@ export default class CreatePoll extends Component {
     super(props);
     this.state = {
       poll: '',
-      answers: [{answer: ''}],
+      answers: [<TextInput key={0} />],
       next: false,
       count: 1,
     };
     this.handleNextClick = this.handleNextClick.bind(this)
     this.renderTwoInputs = this.renderTwoInputs.bind(this)
-    this.renderOneInput = this.renderOneInput.bind(this)
   }
   
   classes = {
@@ -43,43 +43,25 @@ export default class CreatePoll extends Component {
       count: this.state.count + 1
     });
   }
-  
+
   renderTwoInputs() {
-    this.addAnswer()
     return (
     <>
       <TextInput style={this.classes.textInput}/>
       <TextInput style={this.classes.textInput}/>
-      <Button
-      style={this.classes.button}
-      onPress={() => {
-        this.setState({count: this.state.count + 1});
-        this.renderOneInput();
-      }}
-      title={'Add Another Answer'}
-      />
+      <Button title='+' onPress={() => this.renderOneInput(this.state.answers.length)} />
+      {this.state.answers.map((value, index) => {
+        return value
+      })}
     </>
     );
   }
   
-  renderOneInput() {
-    return (
-    <>
-      <TextInput style={this.classes.textInput}/>
-      <Button
-      style={this.classes.button}
-      title={'add answer'}
-      />
-    </>
-    );
+  renderOneInput = (key) => {
+    let answers = this.state.answers;
+    answers.push(<TextInput key={key} style={this.classes.textInput}/>);
+    this.setState({ answers });
   }
-  
-  addAnswer(){
-    // this.setState((prevState) => ({
-    //   answers: [...prevState.answers, {answer: ''}],
-    // }));
-  }
-  
   
   render() {
     
@@ -104,8 +86,10 @@ export default class CreatePoll extends Component {
       }
     };
     
-    const NextButton = <Button style={this.classes.button} title="Next" onPress={() => {this.handleNextClick()}}/>
+    let answers = this.state.answers;
     
+    const NextButton = <Button style={this.classes.button} title="Next" onPress={() => {this.handleNextClick()}}/>
+    let inputs = this.state.answers
     return (
     <View>
       <Text style={classes.text}>Start a poll</Text>
@@ -117,7 +101,6 @@ export default class CreatePoll extends Component {
       value={this.state.poll}
       />
       {(this.state.next) ? this.renderTwoInputs() : NextButton}
-      
     </View>
     );
   }
