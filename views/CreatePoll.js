@@ -7,12 +7,13 @@ export default class CreatePoll extends Component {
     super(props);
     this.state = {
       poll: '',
-      answers: ['ans-0'],
+      answers: [{answer: ''}],
       next: false,
       count: 1,
     };
     this.handleNextClick = this.handleNextClick.bind(this)
     this.renderTwoInputs = this.renderTwoInputs.bind(this)
+    this.renderOneInput = this.renderOneInput.bind(this)
   }
   
   classes = {
@@ -20,7 +21,7 @@ export default class CreatePoll extends Component {
       marginBottom: 5,
     },
     textInput: {
-      height: 20,
+      height: 30,
       width: 350,
       borderWidth: 1,
       borderRadius: 5,
@@ -36,18 +37,6 @@ export default class CreatePoll extends Component {
     }
   };
   
-  anotherAnswer() {
-    return (
-    <>
-      <TextInput style={this.classes.textInput}/>
-      <Button
-      style={this.classes.button}
-      title={'add answer'}
-      />
-    </>
-    );
-  }
-  
   handleNextClick() {
     this.setState({
       next: true,
@@ -56,6 +45,7 @@ export default class CreatePoll extends Component {
   }
   
   renderTwoInputs() {
+    this.addAnswer()
     return (
     <>
       <TextInput style={this.classes.textInput}/>
@@ -63,15 +53,33 @@ export default class CreatePoll extends Component {
       <Button
       style={this.classes.button}
       onPress={() => {
-        this.setState({count: this.state.count + 1}, () => {
-          this.anotherAnswer()
-        });
+        this.setState({count: this.state.count + 1});
+        this.renderOneInput();
       }}
+      title={'Add Another Answer'}
+      />
+    </>
+    );
+  }
+  
+  renderOneInput() {
+    return (
+    <>
+      <TextInput style={this.classes.textInput}/>
+      <Button
+      style={this.classes.button}
       title={'add answer'}
       />
     </>
     );
   }
+  
+  addAnswer(){
+    // this.setState((prevState) => ({
+    //   answers: [...prevState.answers, {answer: ''}],
+    // }));
+  }
+  
   
   render() {
     
@@ -80,7 +88,7 @@ export default class CreatePoll extends Component {
         marginBottom: 5,
       },
       textInput: {
-        height: 80,
+        height: 150,
         width: 350,
         borderWidth: 2,
         borderRadius: 5,
@@ -89,20 +97,14 @@ export default class CreatePoll extends Component {
       },
       button: {
         position: 'right',
-        height: 40,
+        height: 60,
         borderWidth: 2,
         borderRadius: 10,
         padding: 5,
       }
     };
     
-    const NextButton = <Button
-        style={this.classes.button}
-        title="Next"
-        onPress={() => {
-          this.handleNextClick()
-        }}
-      />
+    const NextButton = <Button style={this.classes.button} title="Next" onPress={() => {this.handleNextClick()}}/>
     
     return (
     <View>
@@ -111,10 +113,11 @@ export default class CreatePoll extends Component {
       style={classes.textInput}
       multiline
       numberOfLine={4}
-      onChangeText={(poll) => this.setState({poll: poll})}
+      onChangeText={(text) => this.setState({poll: text})}
       value={this.state.poll}
       />
       {(this.state.next) ? this.renderTwoInputs() : NextButton}
+      
     </View>
     );
   }
