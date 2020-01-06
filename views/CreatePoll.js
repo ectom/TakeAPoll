@@ -8,12 +8,12 @@ export default class CreatePoll extends Component {
     super(props);
     this.state = {
       poll: '',
-      answers: [<TextInput key={0} />],
+      answers: [<TextInput key={0} style={this.classes.textInput}/>, <TextInput key={1} style={this.classes.textInput}/>],
       next: false,
       count: 1,
     };
     this.handleNextClick = this.handleNextClick.bind(this)
-    this.renderTwoInputs = this.renderTwoInputs.bind(this)
+    this.renderInputs = this.renderInputs.bind(this)
   }
   
   classes = {
@@ -40,19 +40,17 @@ export default class CreatePoll extends Component {
   handleNextClick() {
     this.setState({
       next: true,
-      count: this.state.count + 1
+      count: this.state.count + 2
     });
   }
 
-  renderTwoInputs() {
+  renderInputs() {
     return (
     <>
-      <TextInput style={this.classes.textInput}/>
-      <TextInput style={this.classes.textInput}/>
-      <Button title='+' onPress={() => this.renderOneInput(this.state.answers.length)} />
       {this.state.answers.map((value, index) => {
         return value
       })}
+      <Button title='+' onPress={() => this.renderOneInput(this.state.answers.length)} />
     </>
     );
   }
@@ -100,7 +98,7 @@ export default class CreatePoll extends Component {
       onChangeText={(text) => this.setState({poll: text})}
       value={this.state.poll}
       />
-      {(this.state.next) ? this.renderTwoInputs() : NextButton}
+      {(this.state.next) ? this.renderInputs() : NextButton}
     </View>
     );
   }
