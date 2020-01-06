@@ -10,7 +10,6 @@ export default class CreatePoll extends Component {
       poll: '',
       answers: [<TextInput key={0} style={this.classes.textInput}/>, <TextInput key={1} style={this.classes.textInput}/>],
       next: false,
-      count: 1,
     };
     this.handleNextClick = this.handleNextClick.bind(this)
     this.renderInputs = this.renderInputs.bind(this)
@@ -38,10 +37,7 @@ export default class CreatePoll extends Component {
   };
   
   handleNextClick() {
-    this.setState({
-      next: true,
-      count: this.state.count + 2
-    });
+    this.setState({next: true});
   }
 
   renderInputs() {
@@ -55,10 +51,20 @@ export default class CreatePoll extends Component {
     );
   }
   
+  answersLength(){
+    let size = 0;
+    for(const answer in this.state.answers){
+      size++;
+    }
+    return size;
+  }
+  
   renderOneInput = (key) => {
-    let answers = this.state.answers;
-    answers.push(<TextInput key={key} style={this.classes.textInput}/>);
-    this.setState({ answers });
+    if(this.answersLength() < 4) {
+      let answers = this.state.answers;
+      answers.push(<TextInput key={key} style={this.classes.textInput}/>);
+      this.setState({ answers});
+    }
   }
   
   render() {
