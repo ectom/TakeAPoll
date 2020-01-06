@@ -13,6 +13,7 @@ export default class CreatePoll extends Component {
     };
     this.handleNextClick = this.handleNextClick.bind(this)
     this.renderInputs = this.renderInputs.bind(this)
+    this.answersLength = this.answersLength.bind(this)
   }
   
   classes = {
@@ -39,6 +40,20 @@ export default class CreatePoll extends Component {
   handleNextClick() {
     this.setState({next: true});
   }
+  
+  subtractOneInput(length) {
+    let answers = this.state.answers;
+    answers.pop()
+    this.setState({answers});
+  }
+  
+  addInputButton() {
+    if (this.answersLength() < 4){
+      return <Button title='+' onPress={() => this.renderOneInput(this.state.answers.length)} />
+    } else {
+      return <Button title='-' onPress={() => this.subtractOneInput()} />
+    }
+  }
 
   renderInputs() {
     return (
@@ -46,7 +61,7 @@ export default class CreatePoll extends Component {
       {this.state.answers.map((value, index) => {
         return value
       })}
-      <Button title='+' onPress={() => this.renderOneInput(this.state.answers.length)} />
+      {this.addInputButton()}
     </>
     );
   }
