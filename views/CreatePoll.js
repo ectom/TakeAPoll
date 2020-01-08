@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Text, TextInput, View, Button, Alert} from 'react-native';
-import NewInputs from '../components/NewInputs';
 
 
 export default class CreatePoll extends Component {
@@ -8,12 +7,15 @@ export default class CreatePoll extends Component {
     super(props);
     this.state = {
       poll: '',
-      answers: [<TextInput key={0} style={this.classes.textInput}/>, <TextInput key={1} style={this.classes.textInput}/>],
+      inputs: [],
+      answers: ['', ''],
       next: false,
+      test: ''
     };
     this.handleNextClick = this.handleNextClick.bind(this)
     this.renderInputs = this.renderInputs.bind(this)
     this.answersLength = this.answersLength.bind(this)
+    this.handleTextChange = this.handleTextChange.bind(this)
   }
   
   classes = {
@@ -37,18 +39,30 @@ export default class CreatePoll extends Component {
     }
   };
   
+  handleTextChange(text) {
+    // console.log(text)
+  }
+  
+//   onChangeText={(text) => this.setState({poll: text})}
+//   value={this.state.poll}
+
   handleNextClick() {
-    this.setState({next: true});
+    let inputs = this.state.inputs;
+    inputs.push(<TextInput  value={this.state.test} onChangeText={(text) => {this.setState({test: text})}} style={this.classes.textInput}/>)
+    inputs.push(<TextInput key={1} value={this.state.answers[1]} onChangeText={(text) => {this.handleTextChange(text)}} style={this.classes.textInput}/>)
+    this.setState({next: true, inputs: inputs});
   }
   
   subtractOneInput(length) {
+    let inputs = this.state.inputs;
     let answers = this.state.answers;
+    inputs.pop()
     answers.pop()
-    this.setState({answers});
+    this.setState({inputs: inputs, answers: answers});
   }
   
   addInputButton() {
-    if (this.answersLength() < 4){
+    if (this.answersLength() < 5){
       return <Button title='+' onPress={() => this.renderOneInput(this.state.answers.length)} />
     } else {
       return <Button title='-' onPress={() => this.subtractOneInput()} />
@@ -58,7 +72,7 @@ export default class CreatePoll extends Component {
   renderInputs() {
     return (
     <>
-      {this.state.answers.map((value, index) => {
+      {this.state.inputs.map((value, index) => {
         return value
       })}
       {this.addInputButton()}
@@ -68,17 +82,19 @@ export default class CreatePoll extends Component {
   
   answersLength(){
     let size = 0;
-    for(const answer in this.state.answers){
+    for(const inputs in this.state.inputs){
       size++;
     }
     return size;
   }
   
-  renderOneInput = (key) => {
-    if(this.answersLength() < 4) {
+  renderOneInput = (i) => {
+    if(this.answersLength() < 5) {
+      let inputs = this.state.inputs;
       let answers = this.state.answers;
-      answers.push(<TextInput key={key} style={this.classes.textInput}/>);
-      this.setState({ answers});
+      answers.push('');
+      inputs.push(<TextInput key={i} value={this.state.answers[i]} onChangeText={(e) => {this.handleTextChange(e)}} style={this.classes.textInput}/>);
+      this.setState({ inputs, answers});
     }
   }
   
@@ -108,7 +124,7 @@ export default class CreatePoll extends Component {
     let answers = this.state.answers;
     
     const NextButton = <Button style={this.classes.button} title="Next" onPress={() => {this.handleNextClick()}}/>
-    let inputs = this.state.answers
+    let inputs = this.state.inputs;
     return (
     <View>
       <Text style={classes.text}>Start a poll</Text>
