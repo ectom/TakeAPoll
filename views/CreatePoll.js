@@ -1,24 +1,14 @@
 import React, {Component} from 'react';
 import {Text, TextInput, View, Button, Alert} from 'react-native';
 
-const classes = {
-  textInput: {
-    height: 30,
-    width: 350,
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 5,
-    marginBottom: 10,
-  }
-};
 
-const AnswerInput = (ans, handleChange, val) => {
+const AnswerInput = (ans, handleChange, val, classes) => {
   return(
   <TextInput
     ans={ans}
     onChangeText={(text) => handleChange(text, ans)}
     defaultValue={val}
-    style={classes.textInput}
+    style={classes}
   />
   )
 }
@@ -40,8 +30,6 @@ export default class CreatePoll extends Component {
     };
     this.handleNextClick = this.handleNextClick.bind(this)
     this.renderInputs = this.renderInputs.bind(this)
-    this.answersLength = this.answersLength.bind(this)
-    // this.handleTextChange = this.handleTextChange.bind(this)
   }
   
   classes = {
@@ -65,30 +53,26 @@ export default class CreatePoll extends Component {
     }
   };
   
-  handleTextChange = e => {
-    // this.setState({answers: text})
-    console.log(e)
-  }
-  handleTextChangeNew = (text, ans) => {
-    // this.setState({answers: text})
-    console.log(text, ans)
+  handleTextChange = (text, ans) => {
+    let answers = this.state.answers;
+    answers[ans] = text;
+    this.setState({answers});
   }
 
   handleNextClick() {
     let inputs = this.state.inputs;
-    inputs.push(AnswerInput('answer1', this.handleTextChangeNew, this.state.answers['answer1']))
-    // inputs.push(<TextInput key={1} onChangeText={(text) => this.handleTextChange(text)} defaultValue={this.state.answers['answer1']} style={this.classes.textInput}/>)
-    inputs.push(<TextInput key={2} onChangeText={(text) => this.handleTextChange(text)} defaultValue={this.state.answers['answer2']} style={this.classes.textInput}/>)
+    inputs.push(AnswerInput('answer1', this.handleTextChange, this.state.answers['answer1'], this.classes.textInput))
+    inputs.push(AnswerInput('answer2', this.handleTextChange, this.state.answers['answer2'], this.classes.textInput))
     this.setState({next: true, inputs: inputs});
   }
   
   renderOneInput = (i) => {
-    if(this.answersLength() < 5) {
+    if(this.state.inputs.length < 5) {
       let inputs = this.state.inputs;
       let answers = this.state.answers;
-      const num = 'answer' + inputs.length + 1;
-      inputs.push(<TextInput onChangeText={(text, e) => this.handleTextChange(e)} defaultValue={this.state.answers[num]} style={this.classes.textInput}/>);
-      this.setState({ inputs, answers});
+      const num = 'answer' + (inputs.length + 1);
+      inputs.push(AnswerInput(num, this.handleTextChange, this.state.answers[num], this.classes.textInput))
+      this.setState({inputs, answers});
     }
   }
   
@@ -112,7 +96,7 @@ export default class CreatePoll extends Component {
     let answers = this.state.answers;
     const num = 'answer' + inputs.length;
     inputs.pop()
-    answers[num] = '' // Clear answer
+    answers[num] = ''
     this.setState({inputs: inputs, answers: answers});
   }
   
@@ -126,14 +110,6 @@ export default class CreatePoll extends Component {
       {this.addInputButton()}
     </>
     );
-  }
-  
-  answersLength(){
-    let size = 0;
-    for(const inputs in this.state.inputs){
-      size++;
-    }
-    return size;
   }
   
   render() {
