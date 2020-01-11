@@ -150,6 +150,10 @@ export default class CreatePoll extends Component {
       value={this.state.poll}
       />
       {(this.state.next) ? this.renderInputs() : NextButton}
+      <Button
+        title="Cancel"
+        onPress={() => this.props.navigation.navigate('HomePage')}
+      />
     </View>
     );
   }

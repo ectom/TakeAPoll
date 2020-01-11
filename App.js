@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import CreatePoll from './views/CreatePoll';
+import AppNavigator from './views/AppNavigator';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 export default function App() {
   return (
     <View style={styles.container}>
-      <CreatePoll/>
+      <AppNavigator/>
     </View>
   );
 }
