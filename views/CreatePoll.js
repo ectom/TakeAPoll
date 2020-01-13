@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, TextInput, View, Button, Alert} from 'react-native';
+import {Text, TextInput, View, Button} from 'react-native';
 
 
 const AnswerInput = (ans, handleChange, val, classes) => {
@@ -28,11 +28,18 @@ export default class CreatePoll extends Component {
       },
       next: false,
     };
-    this.handleNextClick = this.handleNextClick.bind(this)
+    this.handleAddAnswersClick = this.handleAddAnswersClick.bind(this)
     this.renderInputs = this.renderInputs.bind(this)
   }
   
   classes = {
+    container: {
+      // flex: 1,
+      paddingTop: 60,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     text: {
       marginBottom: 5,
     },
@@ -59,7 +66,7 @@ export default class CreatePoll extends Component {
     this.setState({answers});
   }
 
-  handleNextClick() {
+  handleAddAnswersClick() {
     let inputs = this.state.inputs;
     inputs.push(AnswerInput('answer1', this.handleTextChange, this.state.answers['answer1'], this.classes.textInput))
     inputs.push(AnswerInput('answer2', this.handleTextChange, this.state.answers['answer2'], this.classes.textInput))
@@ -95,8 +102,8 @@ export default class CreatePoll extends Component {
     let inputs = this.state.inputs;
     let answers = this.state.answers;
     const num = 'answer' + inputs.length;
-    inputs.pop()
-    answers[num] = ''
+    inputs.pop();
+    answers[num] = '';
     this.setState({inputs: inputs, answers: answers});
   }
   
@@ -104,8 +111,7 @@ export default class CreatePoll extends Component {
     return (
     <>
       {this.state.inputs.map((element, index) => {
-        console.log(element)
-        return element
+        return element;
       })}
       {this.addInputButton()}
     </>
@@ -115,6 +121,13 @@ export default class CreatePoll extends Component {
   render() {
     
     const classes = {
+      container: {
+        // flex: 1,
+        paddingTop: 60,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
       text: {
         marginBottom: 5,
       },
@@ -135,12 +148,10 @@ export default class CreatePoll extends Component {
       }
     };
     
-    let answers = this.state.answers;
+    const NextButton = <Button style={this.classes.button} title="Add Answers" onPress={() => {this.handleAddAnswersClick()}}/>;
     
-    const NextButton = <Button style={this.classes.button} title="Next" onPress={() => {this.handleNextClick()}}/>
-    let inputs = this.state.inputs;
     return (
-    <View>
+    <View style={this.classes.container}>
       <Text style={classes.text}>Start a poll</Text>
       <TextInput
       style={classes.textInput}
@@ -152,7 +163,7 @@ export default class CreatePoll extends Component {
       {(this.state.next) ? this.renderInputs() : NextButton}
       <Button
         title="Cancel"
-        onPress={() => this.props.navigation.navigate('HomePage')}
+        onPress={() => this.props.navigation.navigate('Home')}
       />
     </View>
     );
