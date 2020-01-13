@@ -108,6 +108,10 @@ export default class CreatePoll extends Component {
     this.setState({inputs: inputs, answers: answers});
   }
   
+  isNullOrWhiteSpace(str) {
+    return (!str || str.length === 0 || /^\s*$/.test(str))
+  }
+  
   renderInputs() {
     return (
     <>
@@ -117,6 +121,27 @@ export default class CreatePoll extends Component {
       {this.addInputButton()}
     </>
     );
+  }
+  
+  renderNextButton() {
+    let isPoll = false;
+    let isAnswers = true;
+    if(!this.isNullOrWhiteSpace(this.state.poll)) {
+      isPoll = true;
+    }
+    for(let i = 1; i <= this.state.inputs.length; i++) {
+      if(this.isNullOrWhiteSpace(this.state.answers['answer'+i])) {
+        isAnswers = false;
+      }
+    }
+    if(isPoll && isAnswers && this.state.next) {
+      return (
+        <Button
+          title="Next"
+          onPress={() => this.props.navigation.navigate('CreatePollSettings')}
+        />
+      )
+    }
   }
   
   render() {
@@ -166,10 +191,7 @@ export default class CreatePoll extends Component {
         title="Cancel"
         onPress={() => this.props.navigation.navigate('Home')}
       />
-      <Button
-        title="Next"
-        onPress={() => this.props.navigation.navigate('CreatePollSettings')}
-      />
+      {this.renderNextButton()}
     </View>
     );
   }
