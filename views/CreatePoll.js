@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import {Text, TextInput, View, Button} from 'react-native';
 
 
-const AnswerInput = (ans, handleChange, val, classes) => {
+const AnswerInput = (ans, handleChange, val, classes, key) => {
   return(
   <TextInput
+    key={key}
     ans={ans}
     onChangeText={(text) => handleChange(text, ans)}
     defaultValue={val}
@@ -68,8 +69,8 @@ export default class CreatePoll extends Component {
 
   handleAddAnswersClick() {
     let inputs = this.state.inputs;
-    inputs.push(AnswerInput('answer1', this.handleTextChange, this.state.answers['answer1'], this.classes.textInput))
-    inputs.push(AnswerInput('answer2', this.handleTextChange, this.state.answers['answer2'], this.classes.textInput))
+    inputs.push(AnswerInput('answer1', this.handleTextChange, this.state.answers['answer1'], this.classes.textInput, 'answer1'))
+    inputs.push(AnswerInput('answer2', this.handleTextChange, this.state.answers['answer2'], this.classes.textInput, 'answer2'))
     this.setState({next: true, inputs: inputs});
   }
   
@@ -78,7 +79,7 @@ export default class CreatePoll extends Component {
       let inputs = this.state.inputs;
       let answers = this.state.answers;
       const num = 'answer' + (inputs.length + 1);
-      inputs.push(AnswerInput(num, this.handleTextChange, this.state.answers[num], this.classes.textInput))
+      inputs.push(AnswerInput(num, this.handleTextChange, this.state.answers[num], this.classes.textInput, num))
       this.setState({inputs, answers});
     }
   }
@@ -164,6 +165,10 @@ export default class CreatePoll extends Component {
       <Button
         title="Cancel"
         onPress={() => this.props.navigation.navigate('Home')}
+      />
+      <Button
+        title="Next"
+        onPress={() => this.props.navigation.navigate('CreatePollSettings')}
       />
     </View>
     );
