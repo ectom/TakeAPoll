@@ -12,7 +12,7 @@ const AnswerInput = (ans, handleChange, val, classes, key) => {
     style={classes}
   />
   )
-}
+};
 
 export default class CreatePoll extends Component {
   constructor(props) {
@@ -29,8 +29,8 @@ export default class CreatePoll extends Component {
       },
       next: false,
     };
-    this.handleAddAnswersClick = this.handleAddAnswersClick.bind(this)
-    this.renderInputs = this.renderInputs.bind(this)
+    this.handleAddAnswersClick = this.handleAddAnswersClick.bind(this);
+    this.renderInputs = this.renderInputs.bind(this);
   }
   
   classes = {
@@ -65,16 +65,16 @@ export default class CreatePoll extends Component {
     let answers = this.state.answers;
     answers[ans] = text;
     this.setState({answers});
-  }
+  };
 
   handleAddAnswersClick() {
     let inputs = this.state.inputs;
-    inputs.push(AnswerInput('answer1', this.handleTextChange, this.state.answers['answer1'], this.classes.textInput, 'answer1'))
-    inputs.push(AnswerInput('answer2', this.handleTextChange, this.state.answers['answer2'], this.classes.textInput, 'answer2'))
+    inputs.push(AnswerInput('answer1', this.handleTextChange, this.state.answers['answer1'], this.classes.textInput, 'answer1'));
+    inputs.push(AnswerInput('answer2', this.handleTextChange, this.state.answers['answer2'], this.classes.textInput, 'answer2'));
     this.setState({next: true, inputs: inputs});
   }
   
-  renderOneInput = (i) => {
+  renderOneInput() {
     if(this.state.inputs.length < 5) {
       let inputs = this.state.inputs;
       let answers = this.state.answers;
@@ -86,20 +86,20 @@ export default class CreatePoll extends Component {
   
   addInputButton() {
     if (this.state.inputs.length === 2) {
-      return <Button title='+' onPress={() => this.renderOneInput(this.state.answers.length)} />
+      return <Button title='+' onPress={() => this.renderOneInput()} />
     } else if (this.state.inputs.length >= 5) {
       return <Button title='-' onPress={() => this.subtractOneInput()} />
     } else if (this.state.inputs.length < 5 && this.state.inputs.length > 2){
       return (
         <>
-          <Button title='+' onPress={() => this.renderOneInput(this.state.answers.length)} />
+          <Button title='+' onPress={() => this.renderOneInput()} />
           <Button title='-' onPress={() => this.subtractOneInput()} />
         </>
       )
     }
   }
   
-  subtractOneInput(length) {
+  subtractOneInput() {
     let inputs = this.state.inputs;
     let answers = this.state.answers;
     const num = 'answer' + inputs.length;
@@ -138,7 +138,7 @@ export default class CreatePoll extends Component {
       return (
         <Button
           title="Next"
-          onPress={() => this.props.navigation.navigate('CreatePollSettings')}
+          onPress={() => this.props.navigation.navigate('CreatePollSettings', {poll: this.state.poll, answers: this.state.answers})}
         />
       )
     }
