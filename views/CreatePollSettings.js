@@ -21,6 +21,7 @@ export default class CreatePollSettings extends Component{
     },
   };
   
+
   googleSheetsPOST(){
     const SHEET_ID = '1yEd1zJKWnwbHImi7U08MXjO1R356Ft-evq7TwQDECu4';
     const ACCESS_TOKEN = 'ya29.Il-5B9MKUgD0wvNpFHTSlDZsTrzOgZD__boEU88erDGphS5jjw8D2FlcP7jqgFLJ6gVPQaqOitFvggw1noj5uVmfyHOvyQ_tsPTxRVzY9FMjOdGqi3fRmz1FBFrrzwpLiA';
@@ -34,22 +35,37 @@ export default class CreatePollSettings extends Component{
       },
       body: JSON.stringify({
         requests: [{
-          range: "Sheet1!A2:H2",
-          majorDimension: "ROWS",
-          values: [
-            [
-              this.state.poll,
-              this.state.answers.answer1,
-              this.state.answers.answer2,
-              this.state.answers.answer3,
-              this.state.answers.answer4,
-              this.state.answers.answer5,
-              'me',
-              10
-            ]
-          ],
+          updateCellsRequest: {
+            rows: [
+              {
+                values: [
+                  {userEnteredValue: {stringValue: this.state.poll}},
+                  {userEnteredValue: {stringValue: this.state.answers.answer1}},
+                  {userEnteredValue: {stringValue: this.state.answers.answer2}},
+                  {userEnteredValue: {stringValue: this.state.answers.answer3}},
+                  {userEnteredValue: {stringValue: this.state.answers.answer4}},
+                  {userEnteredValue: {stringValue: this.state.answers.answer5}},
+                  {userEnteredValue: {stringValue: 'ethan'}},
+                  {userEnteredValue: {numberValue: 123}},
+                  {userEnteredValue: {stringValue: '12/23/19 12:45:07'}}
+                ]
+              }
+            ],
+            fields: '*',
+            start: {
+              rowIndex: 0,
+              columnIndex: 2
+            },
+            range: {
+              startRowIndex: 1,
+              endRowIndex: 2,
+              startColumnIndex: 0,
+              endColumnIndex: 7
+            }
+          }
         }]
       })
+      
     })
    }
   
